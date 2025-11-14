@@ -1,0 +1,22 @@
+# Site settings
+title: Wenbo Mu
+description: >
+  Bioinformatician sharing insights on medical genetics, precision medicine, and life adventures.
+url: "https://muwenbo.github.io"
+
+# Theme settings
+remote_theme: chesterhow/tale
+
+# Build settings
+markdown: kramdown
+
+# Plugins
+plugins:
+  - jekyll-remote-theme
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - CLAUDE.md
+  - README.md
