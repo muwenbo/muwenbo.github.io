@@ -1,0 +1,181 @@
+---
+layout: default
+title: Blog
+---
+
+## Blog
+
+<ul class="blog-tabs">
+  <li class="active" data-filter="all">All</li>
+  <li data-filter="professional">Professional</li>
+  <li data-filter="human">Human</li>
+</ul>
+
+<style>
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+}
+
+.timeline-item {
+  margin-bottom: 2.8rem;
+  padding-left: 0;
+  border-left: 3px solid transparent;
+  transition: border-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.timeline-item:hover {
+  border-left-color: #111;
+  padding-left: 0.9rem;
+}
+
+.timeline-date {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.45rem;
+}
+
+.timeline-rule {
+  border: none;
+  border-top: 2px solid #111;
+  margin: 0 0 1rem 0;
+}
+
+.timeline-row {
+  display: flex;
+  gap: 1.4rem;
+  align-items: flex-start;
+}
+
+.timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-content h2 {
+  margin: 0 0 0.45rem 0;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.timeline-content h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.timeline-content h2 a:hover {
+  text-decoration: underline;
+}
+
+.timeline-excerpt {
+  margin: 0;
+  color: #666;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.timeline-thumb {
+  flex-shrink: 0;
+  width: 148px;
+}
+
+.timeline-thumb img {
+  width: 100%;
+  height: 94px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 500px) {
+  .timeline-thumb { display: none; }
+}
+
+.blog-tabs {
+  display: flex;
+  gap: 1.8rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid #eee;
+}
+
+.blog-tabs li {
+  padding: 0.5rem 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #999;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.blog-tabs li:hover {
+  color: #555;
+}
+
+.blog-tabs li.active {
+  color: #111;
+  border-bottom-color: #111;
+}
+</style>
+
+<ul class="timeline">
+{% for post in site.posts %}
+  {% comment %} Extract first image src from rendered HTML content {% endcomment %}
+  {% if post.image %}
+    {% assign thumb = post.image %}
+  {% else %}
+    {% assign content_parts = post.content | split: 'src="' %}
+    {% if content_parts.size > 1 %}
+      {% assign thumb = content_parts[1] | split: '"' | first %}
+    {% else %}
+      {% assign thumb = nil %}
+    {% endif %}
+  {% endif %}
+
+  <li class="timeline-item" data-category="{{ post.category }}">
+    <div class="timeline-date">{{ post.date | date: "%B %-d, %Y" }}</div>
+    <hr class="timeline-rule">
+    <div class="timeline-row">
+      <div class="timeline-content">
+        <h2><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
+        <p class="timeline-excerpt">{{ post.excerpt | strip_html | truncatewords: 28 }}</p>
+      </div>
+      {% if thumb %}
+      <div class="timeline-thumb">
+        <a href="{{ post.url | prepend: site.baseurl }}">
+          <img src="{{ thumb }}" alt="{{ post.title }}">
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </li>
+{% endfor %}
+</ul>
+
+{% if site.posts.size == 0 %}
+<p>No posts yet. Check back soon.</p>
+{% endif %}
+
+<script>
+document.querySelectorAll('.blog-tabs li').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelector('.blog-tabs li.active').classList.remove('active');
+    tab.classList.add('active');
+    var filter = tab.getAttribute('data-filter');
+    document.querySelectorAll('.timeline-item').forEach(function(item) {
+      if (filter === 'all' || item.getAttribute('data-category') === filter) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
