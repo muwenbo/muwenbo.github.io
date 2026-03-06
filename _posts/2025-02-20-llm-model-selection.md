@@ -5,6 +5,7 @@ date: 2025-02-20
 category: professional
 image: /assets/images/posts/2025-02-20-llm-model-selection/cover.jpg
 tags: [bioinformatics, LLM, AI]
+excerpt: "国产大模型能胜任基因诊断吗？用一个具体的医学任务试试水，同时与 ChatGPT、Claude 等国际标杆模型进行对比。"
 ---
 ## 引言
 
@@ -23,10 +24,10 @@ tags: [bioinformatics, LLM, AI]
 
 那么首先需要准备测试数据。我采用OMIM数据库接口，查询并提取了一个特定基因（以*SLC2A1*为例）的关键信息，包括它和各种表型之间的对应关系，以及分子层面的描述。其中基因和表型的对应关系整理成了一个Markdown表格，而分子描述的部分则保持原来的XML格式。
 
-###### OMIM Phenotype-Gene Relationships
-![](https://files.mdnice.com/user/90337/c1bca6d7-06d4-4eb2-b0ce-a3694b25555a.png)
+### OMIM Phenotype-Gene Relationships
+![OMIM Phenotype-Gene Relationships](/assets/images/posts/2025-02-20-llm-model-selection/Phenotype-Gene-Relationships.png)
 
-###### OMIM Molecular Genetics
+### OMIM Molecular Genetics
 > GLUT1 Deficiency Syndrome 1 In patients with a transport defect of glucose across the blood-brain barrier, consistent with GLUT1 deficiency syndrome-1 (GLUT1DS1; {606777}), {43:Seidner et al. (1998)} identified heterozygous mutations in the SLC2A1 gene ({138140.0001}-{138140.0003}). Two of the patients had been reported by  ……
 
 接下来，采用 LangChain 的 PromptTemplate 创建了一个标准的提示模板，列出我的四个要求：
@@ -64,7 +65,7 @@ prompt = ChatPromptTemplate.from_template(template)
 - 月之暗面 Moonshot-v1-128k
 - 深度求索 DeepSeek-V3
 
-###### 调用LLM模型的示例代码（以Claude.ai为例）
+### 调用LLM模型的示例代码（以Claude.ai为例）
 ```python
 from langchain_anthropic import ChatAnthropic
 from langchain_core.output_parsers import StrOutputParser
@@ -76,7 +77,7 @@ display(Markdown(response))
 
 ## 结果评估
 
-###### Doubao-pro-32k-240615
+### Doubao-pro-32k-240615
 > SLC2A1 基因的致病变异会导致多种疾病。其遗传模式包括常染色体显性遗传、常染色体隐性遗传。
 > 
 > 特发性全身性癫痫易感性 12（Epilepsy, idiopathic generalized, susceptibility to, 12）[MIM:614847]，患者可能存在轻度至中度智力障碍、轻度共济失调、肌阵挛、运动诱发的阵发性运动障碍等临床表现。
@@ -89,24 +90,24 @@ display(Markdown(response))
 > 
 > 伴有神经系统缺陷的 stomatin 缺陷性冷性血细胞增多症（Stomatin-deficient cryohydrocytosis with neurologic defects）[MIM:608885]。
 
-###### Qwen-plus
+### Qwen-plus
 > SLC2A1基因的致病变异可导致多种神经系统疾病，包括苯丙糖转运蛋白缺乏症1型（GLUT1DS1；606777）、苯丙糖转运蛋白缺乏症2型（GLUT1DS2；612126）、与SLC2A1相关的神经缺陷性冷水溶血症（SDCHCN；608885）、特发性全身性癫痫12型易感性（EIG12；614847）及肌张力障碍9型（DYT9；601042）。这些变异主要通过常染色体显性遗传模式传递，少数情况下也可通过常染色体隐性方式遗传。苯丙糖转运蛋白缺乏症1型表现为婴儿期严重的症状，包括发育迟缓、肌阵挛发作、智力障碍、共济失调和腿部锥体束征等。该疾病还可能导致低脑脊液葡萄糖水平（hypoglycorrhachia）。苯丙糖转运蛋白缺乏症2型则通常在儿童期发病，特征为发作性运动障碍、共济失调、构音障碍等症状，且部分患者无癫痫发作。与SLC2A1相关的神经缺陷性冷水溶血症表现为新生儿期出现神经缺陷和红细胞膜阳离子泄漏，导致假性高钾血症和红细胞溶解。特发性全身性癫痫12型易感性表现为早发性失神发作，部分患者伴有轻度至中度智力障碍、轻微共济失调或运动诱导的发作性运动障碍。肌张力障碍9型则表现为儿童期发作的舞蹈手足徐动症和进展性痉挛性截瘫，伴随认知障碍、癫痫发作、偏头痛等症状。上述疾病均与SLC2A1基因突变有关，表明该基因在维持正常神经系统功能方面起关键作用。
 
-###### Llama3–70b-instruct
+### Llama3–70b-instruct
 > SLC2A1基因的致病变异会导致多种疾病，包括 GLUT1缺乏症候群1（GLUT1DS1，606777）[MIM:606777]、GLUT1缺乏症候群2（GLUT1DS2，612126）[MIM:612126]、 idiopathic generalized epilepsy 12（EIG12，614847）[MIM:614847]、Dystonia 9（DYT9，601042）[MIM:601042] 和 Stomatin-deficient cryohydrocytosis with neurologic defects（SDCHCN，608885）[MIM:608885]。这些疾病的遗传模式为 autosomal dominant 或 autosomal recessive。
 > 
 > GLUT1DS1的患者可能存在发育迟缓、智力障碍、癫痫、肌张力障碍、共济失调和视力障碍等临床表现。GLUT1DS2的患者可能存在发育迟缓、智力障碍、癫痫、运动障碍和视力障碍等临床表现。EIG12的患者可能存在癫痫、智力障碍和运动障碍等临床表现。DYT9的患者可能存在舞蹈症、痉挛性麻痹和智力障碍等临床表现。SDCHCN的患者可能存在神经系统损害、红细胞膜缺陷和低血糖等临床表现。
 
-###### GPT-4o-mini
+### GPT-4o-mini
 > SLC2A1基因的致病变异与多种疾病相关，包括葡萄糖转运缺陷综合征1（GLUT1缺乏症1，GLUT1DS1）[MIM:606777]、葡萄糖转运缺陷综合征2（GLUT1缺乏症2，GLUT1DS2）[MIM:612126]、特发性全身性癫痫易感性12（EIG12）[MIM:614847]、以及肌张力障碍9（Dystonia 9，DYT9）[MIM:601042]。SLC2A1基因的突变通常以常染色体显性遗传模式传递。GLUT1缺乏症1的患者可能表现为全身性强直-阵挛性癫痫、发育迟缓、轻度智力障碍、运动协调障碍等症状；而GLUT1缺乏症2的患者则可能出现运动发育延迟、横向眼震、言语不清、肢体共济失调等表现。特发性全身性癫痫易感性12的患者通常在4岁之前出现缺失性癫痫，可能伴有轻度至中度智力障碍和运动失调。肌张力障碍9的患者则可能在儿童期出现阵发性舞蹈样运动和进行性痉挛性下肢麻痹，且大多数患者存在一定程度的认知障碍。SLC2A1基因的突变导致的葡萄糖转运缺陷，影响了血脑屏障的功能，进而引发神经系统的多种病理表现。
 
-###### Claude-3-opus-20240229
+### Claude-3-opus-20240229
 > SLC2A1基因的致病变异可导致多种疾病。杂合突变可引起婴儿期发病的1型葡萄糖转运蛋白缺乏综合征（GLUT1 deficiency syndrome 1, infantile onset, severe）[MIM:606777]，常染色体显性或隐性遗传；儿童期发病的2型葡萄糖转运蛋白缺乏综合征（GLUT1 deficiency syndrome 2, childhood onset）[MIM:612126]，常染色体显性遗传；常染色体显性遗传的9型原发性扭转痉挛（Dystonia 9）[MIM:601042]；常染色体显性遗传的特发性全身性癫痫易感性12型（Epilepsy, idiopathic generalized, susceptibility to, 12）[MIM:614847]；以及常染色体显性遗传的神经系统异常的缺乏Stomatin的冷凝集素血症（Stomatin-deficient cryohydrocytosis with neurologic defects）[MIM:608885]。患者的临床表现包括癫痫发作、运动障碍如舞蹈病和肌张力障碍、发育迟缓和智力低下等。SLC2A1基因编码葡萄糖转运蛋白GLUT1，突变会影响GLUT1蛋白的细胞内定位、降低葡萄糖转运功能，从而导致神经系统能量代谢障碍和红细胞膜离子通透性异常。
 
-###### Moonshot-v1-128k
+### Moonshot-v1-128k
 > SLC2A1基因的致病变异可导致多种疾病，包括癫痫、肌张力障碍、GLUT1缺乏综合征等，遗传模式主要为常染色体显性遗传。患者可能出现的临床表现包括全面性强直阵挛发作、肌阵挛发作、轻度精神发育迟滞、抑郁、偏头痛、轻度痉挛性双瘫、发育迟缓、复杂部分性发作、中度精神发育迟滞、小脑共济失调、轻度锥体束征、低血糖性脑脊液等。其中，GLUT1缺乏综合征1型（GLUT1DS1；606777）表现为婴儿期严重发作，包括全面性发作、发育迟缓、小脑共济失调等；GLUT1缺乏综合征2型（GLUT1DS2；612126）表现为儿童期发作，包括发作性运动诱发性运动障碍、轻至中度精神发育迟滞、水平眼球震颤、构音障碍、肢体共济失调、腱反射亢进、肢体肌张力障碍等。特发性全面性癫痫12型（EIG12；614847）主要表现为儿童期发作的失神发作。肌张力障碍9型（DYT9；601042）表现为儿童期发作的发作性舞蹈手足徐动症和进行性痉挛性截瘫，部分患者伴有认知障碍、癫痫发作、偏头痛和共济失调等。[MIM:138140]
 
-###### DeepSeek-V3
+### DeepSeek-V3
 > SLC2A1基因的致病变异可导致多种疾病，其遗传模式主要为常染色体显性遗传。SLC2A1基因突变与葡萄糖转运蛋白1缺乏综合征1型（GLUT1 deficiency syndrome 1, infantile onset, severe）[MIM:606777]相关，患者表现为婴儿期严重的神经系统症状，包括癫痫发作、发育迟缓、智力障碍和小脑性共济失调。此外，SLC2A1基因突变还与葡萄糖转运蛋白1缺乏综合征2型（GLUT1 deficiency syndrome 2, childhood onset）[MIM:612126]相关，患者表现为儿童期发病的运动障碍、发育迟缓和癫痫，部分患者伴有溶血性贫血。SLC2A1基因突变还可导致阵发性运动诱发性运动障碍（Paroxysmal exercise-induced dyskinesias）和特发性全面性癫痫12型（Epilepsy, idiopathic generalized, susceptibility to, 12）[MIM:614847]，患者表现为儿童期发病的癫痫发作、轻度智力障碍和运动障碍。SLC2A1基因突变还与肌张力障碍9型（Dystonia 9）[MIM:601042]相关，患者表现为儿童期发病的阵发性舞蹈手足徐动症和进行性痉挛性截瘫，部分患者伴有认知障碍、癫痫和偏头痛。此外，SLC2A1基因突变还与缺乏stomatin的冷溶血性贫血伴神经系统缺陷（Stomatin-deficient cryohydrocytosis with neurologic defects）[MIM:608885]相关，患者表现为神经系统症状和溶血性贫血。
 
 在这个简单测试中，Claude-3-opus和DeepSeek-V3是明显的胜者，他们生成的结果几乎不需要修改，GPT-4o-mini紧随其后。其他模型的结果则有些差强人意了。具体来讲：
@@ -122,5 +123,3 @@ display(Markdown(response))
 当然，这个测试存在很多局限性。首先，这仅是一个基于单例的测试，而非基于数据集的全面评估。因此，对于不同的基因，前文所述各模型的优劣结论是否依然成立，尚不得而知。其次，这并非一个公平的测试，我所测试的这些模型在成熟度和参数数量上是存在代差的。例如，DeepSeek-V3和Moonshot-v1-128k均为最新模型，而其他模型则可能是半年甚至一年前的版本。
 
 业内广泛认可的DeepSeek-V3毫无疑问表现出色。我没有测试阿里最新的Qwen-Max和字节的Doubao-1.5-pro，他们也许已经解决了Qwen-plus和Doubao-pro在我的测试中所出现的问题。不过，至少进入2025年，国产大模型已经具备足够的性能，以支持一些严肃生产工具的开发了。AI技术在医疗领域的应用潜力巨大，但在实际应用中，我们还是需要谨慎选择模型，打磨提示词，并充分考虑其性能、结果准确性和局限性。
-
-

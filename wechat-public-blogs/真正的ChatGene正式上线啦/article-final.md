@@ -1,11 +1,3 @@
----
-layout: post
-title: "真正的 ChatGene 正式上线 —— Vicuña"
-date: 2025-05-19
-category: professional
-image: /assets/images/posts/2025-05-19-chatgene-launch/cover.png
-tags: [bioinformatics, AI, product]
----
 
 # 真正的 ChatGene 正式上线 —— Vicuña
 

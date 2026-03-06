@@ -5,9 +5,8 @@ date: 2026-02-17
 category: professional
 image: /assets/images/posts/2026-02-17-burning-tokens-for-geneticists/cover.png
 tags: [bioinformatics, ACMG, VCEP, AI, Claude]
+excerpt: "基于 Claude Code 的 Skill 机制，把散落在 PPT 和 Word 里的 ClinGen VCEP 专家规则，变成可执行的 AI 变异评级工具。"
 ---
-# 燃烧 Token 不是程序员的特权，现在轮到遗传分析师了
-
 ## TL;DR
 
 我基于 Claude Code 的 Skill 机制，实现了一套 **VCEP-Aware Variant Classification Skill**，配合 Claude Code、Codex 等 AI 编程工具，可以做到精确、有据可依、符合 ClinGen VCEP 规范的变异评级。

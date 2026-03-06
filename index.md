@@ -28,13 +28,15 @@ You'll probably find me:
 
 ## What I write
 
-I share thoughts on Medium, usually split between two moods:
+I write here, usually split between two moods:
 
 - 👨🏼‍💻 Professional mode: technical insights and the occasional industry observation
 - 👽 Human mode: travel stories and small lessons picked up along the way
+
+[Read the blog →](/blog/)
 
 ---
 
 **Get in touch:** muwenbo.prc@gmail.com
 
-🔗 [LinkedIn](https://linkedin.com/in/wenbo-mu) • ✍️ [Medium](https://medium.com/@luckynomad) • 🎥 [YouTube](https://www.youtube.com/@LuckyNomadX) • 💻 [GitHub](https://github.com/muwenbo)
+🔗 [LinkedIn](https://linkedin.com/in/wenbo-mu) • 🎥 [YouTube](https://www.youtube.com/@LuckyNomadX) • 💻 [GitHub](https://github.com/muwenbo)

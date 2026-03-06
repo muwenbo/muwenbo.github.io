@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "构建一个可控的变异解读工作流"
-date: 2026-01-13
+date: 2026-01-06
 category: professional
+image: /assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/cover.png
 tags: [bioinformatics, ACMG, workflow, AI, HITL]
+excerpt: '全自主 AI Agent 在遗传分析中为何行不通？本文提出以"人在回路"为核心的可控变异解读工作流设计思路。'
 ---
 ## 引言
 
@@ -51,7 +53,7 @@ AI 负责处理复杂性，人类负责保持控制，而系统的可靠性则�
 ### 表型分析
 在前期探索中，我们已经验证了一个相对成熟的 RAG 方案，所以我们只需要完成接口封装与页面交互设计即可。一方面可以保证表型抽取结果的稳定性，另一方面允许用户快速校正和补充，落实 **HITL（Human-in-the-loop）**。
 
-![](https://files.mdnice.com/user/90337/d2e1a6be-0f84-4e5e-95b2-2f16b5f9bc59.png)
+![](/assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/phenotype-analysis.png)
 
 
 ### 变异数据提取和标准化
@@ -65,7 +67,7 @@ AI 负责处理复杂性，人类负责保持控制，而系统的可靠性则�
 在这里我们同时也需要保证 HITL，当 AI 在解析或标准化过程中发生错误时，允许用户进行确认和修正，并将反馈用于触发重新处理。
 
 
-![](https://files.mdnice.com/user/90337/cb43365d-19bc-432b-bce5-aa776ce5500c.png)
+![](/assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/variant-data_extraction.png)
 
 
 ### 变异初筛
@@ -85,7 +87,7 @@ AI 负责处理复杂性，人类负责保持控制，而系统的可靠性则�
 * 变异来源（父源、母源或新发）会影响 AD 变异的判定，如果用户上传的数据缺失这部分注释，同样会引入不确定性。
 * 从整体定位上看，这并不是一个高特异性的工具：真正的阳性变异通常能被排到前面，但如果病人的表型比较宽泛，可能存在很多关联基因的情况下，一些噪音变异也可能获得较高排名。
 
-![](https://files.mdnice.com/user/90337/6b9a503a-d842-4849-839f-23b6e1d0fb6c.png)
+![](/assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/variant-prioritization.png)
 
 
 ### 变异分类
@@ -105,7 +107,7 @@ AI 负责处理复杂性，人类负责保持控制，而系统的可靠性则�
 * 变异致病性证据是否充分，是否存在潜在的质量问题
 
 
-![](https://files.mdnice.com/user/90337/b77bad36-48be-4245-a6d2-d21da8631d9c.png)
+![](/assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/variant-categorization.png)
 
 将来如果能够实现一个可靠的变异评级工具，它同样可以作为这一阶段 Agent 的工具之一，用于进一步提高变异分类的准确性。
 
@@ -141,5 +143,5 @@ AI 负责处理复杂性，人类负责保持控制，而系统的可靠性则�
 
 在变异优先级排序中，阳性变异排名第 1；但在变异分类阶段，AI 认为表型匹配证据不足，将该变异归类为结论不确定。
 
-![](https://files.mdnice.com/user/90337/398eb9dc-b61d-4dff-81f7-d6422e72bb08.png)
+![](/assets/images/posts/2026-01-06-controlled-variant-interpretation-workflow/ETFDH-validation.png)
 

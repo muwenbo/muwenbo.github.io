@@ -3,9 +3,12 @@ layout: post
 title: "在表型分析中应用 RAG：让大模型少说胡话"
 date: 2025-02-28
 category: professional
+image: /assets/images/posts/2025-02-28-rag-for-phenotype-analysis/cover.png
 tags: [bioinformatics, RAG, HPO, AI]
+excerpt: "将非标准临床描述映射到 HPO 标准术语是遗传分析的关键第一步。本文探索 RAG 如何帮助大模型减少幻觉、提升表型分析的精度。"
 ---
 ## 引言
+
 过了一个新年回来之后，发现全中国的公司都在接入或者部署 Deepseek 模型的热潮中。我也通过上一篇的小测试可以初步确定 Deepseek 真的是一个可以用来解决真实世界问题的且国产大模型平台了。上一篇的测试理论上讲对于大模型来说太小儿科了，这次换一个进阶一些的任务。
 
 在针对罕见病和遗传病的分子遗传分析中，由于测序检测出的变异非常多，一个重要的分析策略是基于表型进行分析。通过限定分析为表型相关基因上的变异，来提高分析效率和准确性。这个过程中第一步就是将非标准的临床描述转换成标准化的表型术语。例如病人网织红细胞百分比增高，对应 Human Phenotype Ontology (HPO) 中的 HP:0004312 
@@ -17,7 +20,7 @@ Abnormal reticulocyte morphology (网织红细胞异常)，然后可以关联到
 
 这里包含缩写如“FSGS”、口语化描述如“不会跳绳、骑自行车”，多个连续否定描述如“无惊厥、抽搐”。这都是我们过去智能化方案中处理不理想的情况，我们来看一下大模型的表现如何。
 
-#### Deepseek V3
+### Deepseek V3
 > 以下是将文本中的临床表型转换为Human Phenotype Ontology (HPO)的结果：
 > 
 > 1. **发育迟缓** - HP:0001263 (Global developmental delay)
@@ -56,13 +59,15 @@ Abnormal reticulocyte morphology (网织红细胞异常)，然后可以关联到
 >
 > 这些HPO术语可以用于进一步的临床表型分析和遗传学研究。
 
-#### Deepseek R1
+### Deepseek R1
 
 > 以下是原文中提取的临床表型及其对应的 **Human Phenotype Ontology (HPO)** 术语：
 > 
-> ---
-> 
-> ##### **临床表型与HPO对应表**
+
+---
+
+**临床表型与HPO对应表**
+
 | 临床表型描述                   | HPO编号        | HPO术语名称                                                                 |
 |-------------------------------|---------------|---------------------------------------------------------------------------|
 | 发育迟缓                      | HP:0001263    | Global developmental delay (全面性发育迟缓)                               |
@@ -76,17 +81,18 @@ Abnormal reticulocyte morphology (网织红细胞异常)，然后可以关联到
 | 不会跳绳、骑自行车（运动协调差） | HP:0002072    | Poor coordination (协调能力差)                                            |
 | 食纳增加（食欲亢进）          | HP:0004396    | Hyperphagia (食欲亢进)                                                    |
 | 小便频率增加（多尿）          | HP:0000103    | Polyuria (多尿)                                                           |
+
+
+---
+
 > 
-> 
-> ---
-> 
-> ##### **排除的阴性表型**（无需HPO转换）
+> **排除的阴性表型**（无需HPO转换）
 > 
 > - 无惊厥、抽搐  
 > 
 > - 无家族遗传史  
 > 
-> ##### **备注**
+> **备注**
 > 
 > 1. **家族史**（父母非近亲结婚、无家族遗传史）属于背景信息，不纳入HPO表型。
 > 
@@ -94,7 +100,7 @@ Abnormal reticulocyte morphology (网织红细胞异常)，然后可以关联到
 > 
 > 
 
-#### ChatGPT Research
+### ChatGPT Research
 > 下面是从文本中提取出的临床表型及其对应的 HPO 术语（部分术语根据描述作了合理推断）：
 > 
 > 1. **发育迟缓**  
@@ -280,6 +286,7 @@ response = chain.invoke(
 ```
 
 #### 基于 RAG 实现的 HP 术语分析结果
+
 | 临床表型描述         | HP术语编号   | HP术语英文                                      | HP术语中文               |
 |----------------------|--------------|------------------------------------------------|--------------------------|
 | 发育迟缓             | HP:0001270   | Motor delay                                    | 运动发育迟缓             |
@@ -297,6 +304,7 @@ response = chain.invoke(
 | 夜尿情况不详         | 无           | 无                                             | 无                       |
 | 父母非近亲结婚       | 无           | 无                                             | 无                       |
 | 无家族遗传史         | 无           | 无                                             | 无                       |
+
 
 RAG 确实解决了直接推理中的幻觉问题，但其最终准确性却不如 Deepseek V3 和 R1 的直接推理结果。例如，在“小便频率增加”这一临床表型时，多尿（Polyuria，同义词：Increased urine output）比尿频（Pollakisuria，同义词：Constant urination - Frequent urination）更为准确。同样的，对于“食纳增加”这一表述，其隐含的“食欲增加”或“多食”含义，RAG 未能成功匹配到 Polyphagia（同义词：Hyperphagia - Voracious appetite - Increased appetite）这一术语。这些问题的出现，可能是由于词组过短，且构建向量数据的语料主要以英文原文为主，导致向量数据检测准确性不足，后续的HP 分析自然也就不会产生准确结果。
 

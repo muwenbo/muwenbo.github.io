@@ -4,13 +4,15 @@ title: "构建 PVS1 分析提示词 Step by Step（下）"
 date: 2025-04-21
 category: professional
 tags: [bioinformatics, ACMG, PVS1, AI, prompt-engineering]
+image: /assets/images/posts/2025-04-21-building-pvs1-prompts-part2/cover.png
+excerpt: "AI 在验证过程中屡屡\"掉坑\"，但每次失误都揭示了提示词设计的新思路——PVS1 分析提示词的打磨与迭代之旅。"
 ---
 ## 验证过程
 
 PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种挑战，然后需要不断钻研、调整。正是这些挑战让整个过程充满了趣味。AI 会从每一次“失误”中汲取教训，并在下一次表现得更聪明、更可靠。
 
 
-![](https://files.mdnice.com/user/90337/6fe1112d-ac76-4ff1-ac56-4149a72e7fee.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/PVS1_nonsense.jpg)
 *PVS1 Nonsense or Frameshift 决策树*
 
 ---
@@ -20,7 +22,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 第一个测试就翻车了。很显然，大模型的知识非常渊博，在FGFR3致病机制的判断上，他准确判定出 *FGFR3* 的致病机制是 gain-of-function，但由于存在 CATSHL syndrome 的特例，认定 loss-of-function 也是致病机制，然后将该变异判定为 PVS1。这里的关键是，我并没有提供关于致病机制的文字型输入，这意味着大模型已经有足够的知识去自动进行判定。
 
 
-![](https://files.mdnice.com/user/90337/25160fc9-6fb7-43cf-badf-7b5bd1544353.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/FGFR3-disease mechanism.png)
 *大模型对FGFR3致病机制的描述*
 
 但我们目前还没有设计针对单独疾病进行评级的机制，所以希望他能够依据主要的致病机制进行判定。我首先尝试加上一条约束：“Unless specifically analyzing a variant for a rare alternative phenotype, apply the classification based on the primary disease mechanism associated with the gene's most common phenotype”。但 AI 还是坚持把 CATSHL syndrome 的情况考虑进来。我想可能由于当前的提示词已经承载了非常复杂细节的分析需求，并且大模型对致病机制的判定其实是全面且正确的，仅仅一句话的限定不够改变 AI 的整体分析思路。
@@ -87,7 +89,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 虽然这一升级未必正确，但从工具使用者的角度来看，增加一个额外的思考维度并不一定是坏事。或许，这正是AI超越人类的地方吧？因此，我并不打算对提示词进行调整，以限制AI的这种“额外思考”。
 
 
-![](https://files.mdnice.com/user/90337/73d2f9ff-760b-4d31-a282-20f0209bcb8a.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/idua-pvs1-extra-thinking.png)
 *AI 对 NM_000203.5(IDUA):c.1799del (p.Pro599_Ser600insTer) PVS1的额外思考*
 
 **参考结果**
@@ -118,12 +120,12 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 
 **NM_001310338.2(*MGME1*):c.525_526del (p.Cys175Ter)**
 
-![](https://files.mdnice.com/user/90337/31c5a5d6-b6b8-4865-b18f-00dac7e57055.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/MGME1-gene-structure.png)
 *MGME1 基因结构*
 
 这个变异的主要目的是测试AI是否能正确判定变异是否位于生物学上有意义的转录本（biologically relevant transcripts）中。由于我们没有提供用于判定的数据，AI 一开始的输出有些“胡说八道”，但也不难理解。
 
-![](https://files.mdnice.com/user/90337/ce92871d-72ad-4668-9039-f29fe0eb4170.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/NM_001310338.2-determination-before.png)
 *模型对 NM_001310338.2 是否是生物学上有意义转录本的判读*
 
 同样的，我们将“生物学上有意义的转录本”的判定作为一个单独的模型调用，并且为这一步也设计专属的 思维链提示词来解决这个问题。具体分析思路包括：
@@ -135,7 +137,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 最终，AI 成功将该变异按照预期路径判定为不适用 PVS1。不过，面对更复杂的情况时，我对 AI 是否总能做出准确判断还是持保留态度。由于行业内的评级仍以经典转录本和 MANE Select 转录本为主，这类变异在现有数据库中难以找到，所以也难以基于专家评级对 AI 在这一步的表现进一步验证。
 
 
-![](https://files.mdnice.com/user/90337/38852d4a-5f2f-4413-bdc2-1ce072dc99d2.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/NM_001310338.2-determination-after.png)
 *优化后模型对 NM_001310338.2 是否是生物学上有意义转录本的判读*
 
 **参考结果**
@@ -156,13 +158,13 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 
 尽管 *GPLD1* 的致病机制不是 LoF，AI 会根据这个原因判读 PVS1 不适用。但我们的提示词是设计了让 AI 输出中间分析过程的，所以依然可以根据 AI 的输出来判断 AI 是否识别到外显子中存在人群中的高频 LoF 变异的情况。
 
-![](https://files.mdnice.com/user/90337/d7b55c32-e8c1-4d2b-9f97-ac58149308c8.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/GPLD1-variant-gnomAD-dist.png)
 *gnomAD数据库中 NM_001503.4(GPLD1):c.2440C>T(p.Gln814Ter) 上下游 20bp 的变异分布*
 
 毫无意外，AI 给出的是没有外显子中存在高频 LoF 的变异的证据。要想解决，我们需要把这种数据以输入方式提供给模型，模型才能有判断的依据。这里我们借鉴 AutoPVS1 的实现方式，也就是对所有基因的各个外显子中 LoF 的变异分布及其人群频率进行预计算。然后将这个数据实现为可供我们 workflow 调用的API。当有所在外显子 LoF 变异人群频率的数据时，AI 就可以成功的进行判读了。
 
 
-![](https://files.mdnice.com/user/90337/e8d7004c-8c2a-4fb7-83fd-520664941feb.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/GPLD1-variant-popF-analysis.png)
 *模型对 NM_001503.4(GPLD1):c.2440C>T(p.Gln814Ter) 所在外显子变异人群频率的分析结果*
 
 **参考结果**
@@ -181,7 +183,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 *ABAT* 在 ClinGen 定义中为 Moderate 的临床有效性，也叫基因-疾病有效性（Gene-Disease Validity）。我们的预期是无论变异根据决策树的 PVS1 的评级如何，都需要进行降级处理。经过前面的调整，我们的 AI 终于可以一步到位的给出符合预期的 PVS1_Strong 评级。
 
 
-![](https://files.mdnice.com/user/90337/06bae0a2-5539-428d-b30e-fc79551d29b2.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/ABAT-variant-pvs1-downgrade.png)
 *模型基于基因-疾病有效性对ABAT变异的降级处理*
 
 当然这里并非完全正确。因为在 PVS1 的评级文章中，在临床有效性为 Moderate 的同时，还有以下2个额外的条件，并且是“且(AND)”的要求。但这2个数据除非有大量案例历史数据或者文献检索，是完全无法获取的，AI 自然也无能为力。AI 能做到现在这个程度，我已经非常满意了。
@@ -236,7 +238,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 3. 新增了基于大模型基因致病机制判定。
 4. 新增了基于大模型的生物学有意义转录本判定。
 
-![](https://files.mdnice.com/user/90337/c0582817-d96d-41be-96ce-4f4fe89e7d99.png)
+![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/pvs1-workflow-v2.png)
 *PVS1 workflow v2*
 
 ## 结果示例

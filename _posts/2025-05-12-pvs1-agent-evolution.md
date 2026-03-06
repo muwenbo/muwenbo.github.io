@@ -5,6 +5,7 @@ date: 2025-05-12
 category: professional
 image: /assets/images/posts/2025-05-12-pvs1-agent-evolution/cover.png
 tags: [bioinformatics, ACMG, PVS1, agent, AI]
+excerpt: "把 PVS1 评级工作流改造成真正的 AI 智能体——让大模型自主决策工具调用顺序，而非按预定流程机械执行。"
 ---
 ## 引言
 
@@ -24,12 +25,12 @@ tags: [bioinformatics, ACMG, PVS1, agent, AI]
 
 对于我们的 PVS1 评级工作流改造，实现基础智能体的关键在于：取消预定义的多步骤流程，将基因注释、变异注释、转录本注释等分析模块作为"工具"呈现给 AI，由 AI 自主决策调用哪些工具、以什么顺序执行。由于这些分析模块已经以 API 形式构建完成，且 PVS1 的提示词可以复用，只需补充各工具的描述即可，改造成本相对较低。
 
-![](https://files.mdnice.com/user/90337/158249d7-569a-4462-bb4e-1cec74e8d057.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/pvs-agent.png)
 *PVS1 评级智能体*
 
 当第一次成功运行时，尽管理性上明白 AI 能够完成这样的任务，但亲眼见证这一刻仍然感受到了 AI 的魔法。值得注意的是，在智能体的提示词中，我并未指定工具的调用顺序或依赖关系。然而从运行日志可以看到，AI 展现出了卓越的判断力——它首先调用变异注释工具，生成了基因注释和转录本注释所需的 ID，然后再调用相对应的工具。而对于"外显子中存在人群中的高频 LoF 变异（exon_lof_annotation）"这个工具，由于其输入仅需位置坐标，AI 选择了第一时间调用。这不正是出色的决策与规划（Reasoning & Planning）能力的体现吗？
 
-![](https://files.mdnice.com/user/90337/5920643a-59d5-49e3-8e23-63da8eb1e125.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/pvs1-agent-test-case.png)
 *PVS1 评级智能体测试示例*
 
 关于准确性，由于这只是概念验证阶段，我没有基于 AI 工作流的最终成果将致病机制判断、生物学上有意义的转录本判断等模块全部实现为工具，因此最终测试结果与PVS1 AI 工作流优化前的效果相当。同时，我也感觉过度拆解AI分析过程，可能重新变成"将知识硬编码进系统"，这反而违背了构建智能体、让AI自主决策的初衷。从实现体验来看，对于类似 PVS1 评级这种需要将既有规则和知识融入系统的工具，AI 工作流在设计和调试方面确实比智能体更便捷。合适的才是最好的。
@@ -42,13 +43,13 @@ tags: [bioinformatics, ACMG, PVS1, agent, AI]
 然而，要增加对话能力，必然需要在现有提示词中添加额外说明要求，这极大可能会干扰智能体的分析工作。因此，我采用一个简单的多智能体结构：在现有 PVS1 智能体前增加一个专门负责交互的 AI。这意味着由交互 AI 与用户对话，获取变异的基因组位置、等位基因及基因组版本信息，待所有信息收集完毕后，将结构化数据传递给 PVS1 智能体进行分析。
 
 
-![](https://files.mdnice.com/user/90337/97fcb013-7927-4342-859c-91e7aa2bc218.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/coversation-aware-pvs1-agent.png)
 *具有会话能力的 PVS1 评级智能体*
 
 既然引入了对话功能，我们也需考虑用户体验。对于潜在使用这一工具的遗传分析人员而言，变异在基因组上的绝对位置和等位基因并非直观信息，他们通常使用的是类似 "NM_000142.5：c.1632_1633del (FGFR3)" 这样的HGVS命名。由于大模型自身无法完成这种转换，我们需要为交互 AI 补充一个 HGVS 转换工具，以满足用户的实际需求。
 
 
-![](https://files.mdnice.com/user/90337/503dd1c1-e0be-4e6b-8a02-9ccea29ac030.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/pvs1-agent-ineraction.png)
 *PVS1 评级智能体交互示例*
 
 
@@ -64,12 +65,12 @@ tags: [bioinformatics, ACMG, PVS1, agent, AI]
 
 ✅ 最后，既然是专业领域智能体，当然要有一些外行人难以理解的专业数据资源，比如 OMIM、PubMed 之类。万一需要宣传 RAG，这也可视为一种RAG实现。
 
-![](https://files.mdnice.com/user/90337/44390eb3-aca7-4500-8746-279a57787a23.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/pubmed-extraction-workflow.png)
 *PubMed 文献获取流程*
 
 最终，我们打造了一个功能齐全的 AI 遗传咨询分析智能体。经过几轮测试，发现除了"深度思考"功能难以诱导 AI 调用外，其他工具在相关问题出现时都能被正确调用并生成有效输出，整体表现还算不错。
 
-![](https://files.mdnice.com/user/90337/a316c8dd-a52f-4eed-a760-8789dfa507b5.png)
+![](/assets/images/posts/2025-05-12-pvs1-agent-evolution/ai-genetic-consultation.png)
 *AI 遗传咨询分析智能体*
 
 

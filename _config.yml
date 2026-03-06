@@ -20,3 +20,4 @@ exclude:
   - Gemfile.lock
   - CLAUDE.md
   - README.md
+  - wechat-public-blogs

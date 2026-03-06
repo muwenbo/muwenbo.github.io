@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="60%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <linearGradient id="mtFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d4a6e"/>
+      <stop offset="100%" stop-color="#1a2f4a"/>
+    </linearGradient>
+    <linearGradient id="mtNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2f4a"/>
+      <stop offset="100%" stop-color="#0d1f33"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f3460"/>
+      <stop offset="100%" stop-color="#0a2040"/>
+    </linearGradient>
+    <radialGradient id="moon" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff9e6"/>
+      <stop offset="100%" stop-color="#f0d080"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="420" fill="url(#sky)"/>
+
+  <!-- Stars -->
+  <circle cx="80" cy="40" r="1.2" fill="white" opacity="0.8"/>
+  <circle cx="150" cy="25" r="0.9" fill="white" opacity="0.7"/>
+  <circle cx="230" cy="55" r="1.1" fill="white" opacity="0.9"/>
+  <circle cx="310" cy="30" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="370" cy="60" r="1.3" fill="white" opacity="0.8"/>
+  <circle cx="430" cy="20" r="0.9" fill="white" opacity="0.7"/>
+  <circle cx="500" cy="45" r="1.0" fill="white" opacity="0.9"/>
+  <circle cx="560" cy="15" r="1.2" fill="white" opacity="0.8"/>
+  <circle cx="630" cy="50" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="700" cy="28" r="1.1" fill="white" opacity="0.7"/>
+  <circle cx="760" cy="55" r="1.0" fill="white" opacity="0.8"/>
+  <circle cx="120" cy="70" r="0.8" fill="white" opacity="0.5"/>
+  <circle cx="470" cy="75" r="0.9" fill="white" opacity="0.6"/>
+  <circle cx="670" cy="70" r="1.1" fill="white" opacity="0.7"/>
+
+  <!-- Moon -->
+  <circle cx="670" cy="85" r="38" fill="url(#moon)" opacity="0.92"/>
+  <circle cx="685" cy="72" r="30" fill="#16213e" opacity="0.18"/>
+
+  <!-- Far mountains -->
+  <polygon points="0,280 120,160 240,280" fill="url(#mtFar)" opacity="0.9"/>
+  <polygon points="160,280 320,130 480,280" fill="url(#mtFar)" opacity="0.85"/>
+  <polygon points="380,280 560,145 720,280" fill="url(#mtFar)" opacity="0.9"/>
+  <polygon points="600,280 750,170 900,280" fill="url(#mtFar)" opacity="0.85"/>
+
+  <!-- Snow caps - far -->
+  <polygon points="120,160 104,195 136,195" fill="white" opacity="0.7"/>
+  <polygon points="320,130 302,168 338,168" fill="white" opacity="0.7"/>
+  <polygon points="560,145 542,182 578,182" fill="white" opacity="0.7"/>
+  <polygon points="750,170 733,205 767,205" fill="white" opacity="0.7"/>
+
+  <!-- Near mountains -->
+  <polygon points="-20,320 140,200 300,320" fill="url(#mtNear)"/>
+  <polygon points="240,320 430,185 620,320" fill="url(#mtNear)"/>
+  <polygon points="520,320 700,205 880,320" fill="url(#mtNear)"/>
+
+  <!-- Snow caps - near -->
+  <polygon points="140,200 120,240 160,240" fill="white" opacity="0.55"/>
+  <polygon points="430,185 408,228 452,228" fill="white" opacity="0.55"/>
+  <polygon points="700,205 680,245 720,245" fill="white" opacity="0.55"/>
+
+  <!-- Lake / water reflection -->
+  <rect x="0" y="320" width="800" height="100" fill="url(#water)"/>
+
+  <!-- Moon reflection in water -->
+  <ellipse cx="670" cy="340" rx="22" ry="8" fill="#f0d080" opacity="0.25"/>
+  <rect x="662" y="340" width="16" height="80" fill="#f0d080" opacity="0.08"/>
+
+  <!-- Subtle water shimmer lines -->
+  <line x1="0" y1="330" x2="800" y2="330" stroke="#ffffff" stroke-width="0.5" opacity="0.08"/>
+  <line x1="0" y1="345" x2="800" y2="345" stroke="#ffffff" stroke-width="0.5" opacity="0.06"/>
+  <line x1="0" y1="360" x2="800" y2="360" stroke="#ffffff" stroke-width="0.5" opacity="0.05"/>
+
+  <!-- Foreground shore -->
+  <ellipse cx="400" cy="322" rx="420" ry="10" fill="#0d1f33"/>
+
+  <!-- Pine trees silhouette left -->
+  <polygon points="30,320 38,290 46,320" fill="#060e1a"/>
+  <polygon points="50,320 60,282 70,320" fill="#060e1a"/>
+  <polygon points="72,320 83,295 94,320" fill="#060e1a"/>
+
+  <!-- Pine trees silhouette right -->
+  <polygon points="706,320 716,288 726,320" fill="#060e1a"/>
+  <polygon points="730,320 741,278 752,320" fill="#060e1a"/>
+  <polygon points="754,320 765,292 776,320" fill="#060e1a"/>
+</svg>

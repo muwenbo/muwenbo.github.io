@@ -3,7 +3,9 @@ layout: post
 title: "构建变异评级的 AI Workflow"
 date: 2025-03-28
 category: professional
+image: /assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/cover.png
 tags: [bioinformatics, ACMG, AI, workflow]
+excerpt: "基于 ACMG 指南，用 Dify 搭建一个 AI 工作流，尝试自动完成基因变异致病性的分级评估。"
 ---
 ## 引言
 
@@ -44,9 +46,7 @@ tags: [bioinformatics, ACMG, AI, workflow]
 3. **转录本数据**：来源于 NCBI 的 gff 文件。我们不想让模型做推理的同时，还要做数学计算。所以这里提前计算了每个转录本的长度、外显子结构，并根据 50-55 nt 规则估算 NMD 阈值。对于像 *PTEN*、*CDH* 等一些 ClinGen 有特殊规定的基因，也可以直接修正具体数值来测试大模型对 NMD 的判读准确性。
 4. **文献或病例研究**：目前像 SerpApi, Tavily 等主流的支持 AI 搜索的工具大多是执行网页搜索，返回的结果主要是 ClinVar 数据的总结，无法得到我们想要的来着文献内容的 de novo 发生情况、功能性研究或替代分子机制（alternative molecular basis）等信息。唯一较符合需求的是 scite.ai，它可以基于自定义提示词收集文章，并提取相关研究数据。可惜免费账户无法调用 API，因此无法直接整合进这个 workflow 中。只能将他的文献总结作为手动输入到 workflow 中。
 
-![](https://files.mdnice.com/user/90337/c9ca4938-5d8b-4b88-93b7-016f9ce123cd.png)
-
-![](https://files.mdnice.com/user/90337/77089803-2b69-4b36-9703-475dc12bd536.png)
+![](/assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/scite.png)
 
 
 ### 模型及提示词构建
@@ -102,7 +102,7 @@ tags: [bioinformatics, ACMG, AI, workflow]
 
 这样，我们就有了足够的准备来构建一个最基础的 AI Workflow 了，按顺序依次完成变异注释、基因注释、转录本注释以及模型推理。
 
-![](https://files.mdnice.com/user/90337/7ec823c2-d38a-4032-9ae3-c1821c3d415b.png)
+![](/assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/Classification_AI_workflow.png)
 
 
 到了这个阶段，可以宣称胜利了——我们已经成功搭建了一站式 AI 遗传分子诊断大模型，bla bla bla。不过作为还有一些节操的开发者，即使是并不追求严谨的概念验证，也还是需要挑几个变异测试和评估一下。
@@ -164,14 +164,15 @@ VUS (PP2_Moderate+PP3+PM2_Supporting)
 > This missense variant occurs in a critical domain of PTEN and is predicted to have a deleterious effect by multiple computational tools. It appears rare or absent in population databases (PM2) and falls within a known functionally important region with few benign variants (PM1). PTEN is known to harbor disease-causing missense variants (PP2), and strong in silico predictions further support pathogenicity (PP3). The collective evidence fulfills at least two Moderate (PM1 + PM2) and two Supporting (PP2 + PP3) criteria, consistent with an overall assessment of Likely Pathogenic under ACMG/AMP guidelines.
 
 **专家vs.AI**:
-1. 共同点
+
+#### 共同点
 
 专家和 AI 都引用的ACMG 证据：
 - **PP2（基因的疾病相关性）**：PTEN 主要通过错义变异致病，且错义变异较少是良性变异。
 - **PP3（生物信息学预测）**：REVEL 评分较高（>0.7），表明该变异可能影响蛋白功能。
 - **PM2（人群数据库频率）**：该变异在 gnomAD 等人群数据库中缺失或极为罕见。
 
-2. 评级分歧的关键点
+#### 评级分歧的关键点
 
 | 证据项              | **专家（VUS）**                                                    | **AI（Likely Pathogenic）**                                           |
 |---------------------|---------------------------------------------------------------------|-------------------------------------------------------------------------|
@@ -187,13 +188,14 @@ VUS (PP2_Moderate+PP3+PM2_Supporting)
 Likely Pathogenic (PP4_Moderate+PM2+PM3)
 
 **专家vs.AI**:
-1. 共同点
+
+#### 共同点
 
 专家和 AI 都引用的ACMG 证据：
 - **PM2（低频率证据）**：该变异在 gnomAD 中的频率极低，符合 **PAH** 为稀有的常染色体隐性遗传疾病的背景。
 - **PP3（生物信息学预测）**：该变异位于 **3′ 剪接接受位点** 附近，虽然功能尚未确认，但生物信息学工具通常预测靠近剪接位点的区域可能影响剪接。
 
-2. 评级分歧的关键点
+#### 评级分歧的关键点
 
 | 证据项              | **专家（Likely Pathogenic）**                                      | **AI（VUS）**                                                 |
 |---------------------|--------------------------------------------------------------------|------------------------------------------------------------------|
@@ -209,14 +211,15 @@ Likely Pathogenic (PP4_Moderate+PM2+PM3)
 Pathogenic (PM3_Very Strong+PVS1_Strong)
 
 **专家vs.AI**:
-1. 共同点
+
+#### 共同点
 
 专家和 AI 都认为该变异对 **ATM 基因功能** 有影响，且都提供了支持性证据。具体的共同点包括：
 - **PM2（低频率证据）**：该变异在 **gnomAD** 数据库中非常罕见，符合低频率要求，支持该变异可能与疾病相关。
 - **功能数据（PS3）**：专家和 AI 都提到该变异通过 **实验确认** 导致 **外显子跳跃（exon skipping）**，进而引发 **ATM 蛋白的框移缺失**，从而影响蛋白功能。
 - **表型特异性（PP4）**：该变异在 **Ataxia-Telangiectasia（共济失调-毛细血管扩张症）** 和 **ATM 相关癌症**（如黑色素瘤）患者中有报告，符合 **ATM** 基因在疾病中的致病作用。
 
-2. 评级分歧的关键点
+#### 评级分歧的关键点
 
 | 证据项                    | **专家 (Pathogenic)**                                                         | **AI (Likely Pathogenic)**                                                         |
 |---------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|

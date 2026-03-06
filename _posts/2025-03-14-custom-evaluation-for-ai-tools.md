@@ -3,10 +3,10 @@ layout: post
 title: "设计大模型工具专属的评估方式"
 date: 2025-03-14
 category: professional
+image: /assets/images/posts/2025-03-14-custom-evaluation-for-ai-tools/cover.png
 tags: [bioinformatics, AI, evaluation]
+excerpt: "感觉良好不等于真的好用。为 HPO 表型分析工具设计专属评估体系，用客观数据来衡量大模型的实际效果。"
 ---
-# 设计大模型工具专属的评估方式
-
 ## 引言
 
 接着上篇文章的讨论，目前为止我依然还是靠着单一案例和直觉来判断大模型的效果。很多人可能会觉得大模型"挺好用的"，就想当然以为随便搞点数据训练一下大模型就可以实现一站式智能化了。但一个严肃的工具或工作流不能光靠感觉良好，而是需要基于客观的评估（Evaluation）。
@@ -29,12 +29,12 @@ tags: [bioinformatics, AI, evaluation]
 
 不过，这两类评估方式都存在一个问题，就是不能很好地衡量 HP 术语的近似性和关联性。举个例子，当临床描述是"尿色偏黄"时，人工选择的 HP 术语是 `HP:0012086 尿液颜色异常`，它的子表型"深色尿液"和"深黄色尿液"其实也算吻合符合，甚至很难界定“深黄色尿液”和“尿液颜色异常”哪一个更准确。但这两类传统指标在计算时会认为这些选择不符合。因此答案集中一个完全错误的 HP 术语跟一个差近似但不完全一样的 HP 术语对这些指标的影响是一样的，导致评价效果大打折扣。
 
-![](https://files.mdnice.com/user/90337/6517bf8e-0eaf-43a1-b5ff-08496b0621a2.png)
+![](/assets/images/posts/2025-03-14-custom-evaluation-for-ai-tools/hpo_urine.png)
 *“尿液颜色异常”的术语层级*
 
 ### 基于图结构的评估
 
-![](https://files.mdnice.com/user/90337/45277caf-e1b7-48d0-adcb-822e8161b082.png)
+![](/assets/images/posts/2025-03-14-custom-evaluation-for-ai-tools/hpo_flow.png)
 *HPO 结构示例*
 
 既然 HPO 数据是一个有向无环图（DAG），所以我可以利用基于图的评估方法，比如 Coverage Similarity。Coverage Similarity 通过测量预测结果与标准答案的后代节点集合的重叠程度来评估结果的覆盖情况，取值从 0（没重叠）到 1（完全重叠）。基于图的评估方式通常是通过计算子图的节点数量、边的长度等指标来判断结果的相似性。缺点是对不熟悉图这种数据结构的人来说不够直观。
@@ -50,6 +50,7 @@ tags: [bioinformatics, AI, evaluation]
 ## 评估结果
 
 在上述评估方法下，应用 RAG 方法进行一下测试，结果如下：
+
 | Case ID   |   Precision |   Recall |   F1 score |   Jaccard |   Coverage Similarity |   Approximate Hit Rate |
 |:----------|------------:|---------:|-----------:|----------:|----------------------:|-----------------------:|
 | Case 1    |        0.42 |     0.29 |       0.34 |      0.21 |                  0.78 |                  88.24 |
@@ -69,7 +70,8 @@ Coverage Similarity 基本在 0.6 - 0.8 之间。由于这个指标并不常规�
 
 > 随机生成 1000 组和某正确 HP 术语集数量相近的答案集，然后计算它们和正确 HP ID 集的 Coverage Similarity ，形成背景样本数据。
 
-![](https://files.mdnice.com/user/90337/431df8dd-27a0-4d5d-8549-13015f5e1aa4.png)
+![](/assets/images/posts/2025-03-14-custom-evaluation-for-ai-tools/output.png)
+
 
 结果显示 RAG 方法的 Coverage Similarity 显著高于随机数据的分布，说明这个指标是有用的。同时，Approximate Hit Rate 也非常高，基本都在 80% 以上，表明 RAG 方法确实能比较好的分析得到正确的 HP 术语。
 
