@@ -15,6 +15,13 @@ bundle exec jekyll serve  # Serve locally at http://localhost:4000
 bundle exec jekyll build  # Build static site to _site/
 ```
 
+**Chinese font subset (run after adding/editing posts):**
+```bash
+python3 scripts/build_cjk_font_subset.py --check          # fails if a character is missing
+python3 scripts/build_cjk_font_subset.py <dir-with-ttfs>  # rebuild assets/fonts/jinkai-*.woff2
+```
+Source TTFs (TsangerJinKai02-W04/W05, ~19 MB each, not committed) download from `https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/`. Needs `fonttools` + `brotli`.
+
 **Dependencies:** Ruby + Bundler required. The site uses `github-pages` gem which pins Jekyll and plugin versions to match GitHub Pages.
 
 ## Architecture
@@ -22,8 +29,8 @@ bundle exec jekyll build  # Build static site to _site/
 - **`_config.yml`** — Site metadata, remote theme (`chesterhow/tale`), and plugin configuration.
 - **`index.md`** — Single homepage with front matter `layout: default`. Content is Markdown with inline HTML/CSS.
 - **`_includes/`** — Overrides for the tale theme: `navigation.html` (site header/nav) and `footer.html` (custom footer text).
-- **`assets/`** — Favicon files (SVG, PNG variants).
-- **`banner.jpg`** — Hero image referenced directly in `index.md`.
+- **`assets/`** — Favicon files, `css/custom.css` (Kami-inspired paper theme: parchment background, ink-blue accent, one serif for all text), and `fonts/` (self-hosted Chinese serif subset + JetBrains Mono).
+- **`assets/images/banner-ruta40.jpg`** — Homepage banner (Ruta 40, Patagonia) referenced in `index.md`. Use a new filename when replacing it so browsers do not show a cached copy.
 
 ## Theme
 

@@ -3,6 +3,7 @@ layout: post
 title: "基于 VCEP 评级 Skill 的 HNF1A 变异分析报告"
 date: 2026-02-21
 category: professional
+ai_content: 95
 image: /assets/images/posts/2026-02-21-hnf1a-variant-classification-report/cover.png
 tags: [bioinformatics, ACMG, VCEP, HNF1A, case-study]
 excerpt: "一个实际案例：用 VCEP 评级 Skill 对 HNF1A:c.745T>C 变异进行完整分析，验证 AI 工具的精度与边界。"

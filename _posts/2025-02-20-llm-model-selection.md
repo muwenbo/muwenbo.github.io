@@ -3,6 +3,7 @@ layout: post
 title: "基因诊断中的大模型选择：国产大模型能胜任吗？"
 date: 2025-02-20
 category: professional
+ai_content: 75
 image: /assets/images/posts/2025-02-20-llm-model-selection/cover.jpg
 tags: [bioinformatics, LLM, AI]
 excerpt: "国产大模型能胜任基因诊断吗？用一个具体的医学任务试试水，同时与 ChatGPT、Claude 等国际标杆模型进行对比。"

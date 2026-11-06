@@ -1,0 +1,20 @@
+{% comment %}
+  "AI 含量" badge: a small battery charged to N% (5 cells, 20% each) plus a label.
+  Mirrors the paper-theme badge in wechat-public-blogs. Set `ai_content: N` in post front matter.
+{% endcomment %}
+{% if page.ai_content != nil %}
+{% assign lit = page.ai_content | divided_by: 20.0 | round %}
+<div class="ai-badge" title="作者自评的 AI 含量">
+  <span class="ai-battery" aria-hidden="true">{% for i in (1..5) %}<span class="ai-cell{% if i <= lit %} on{% endif %}"></span>{% endfor %}</span><span class="ai-cap" aria-hidden="true"></span>
+  <span class="ai-label">AI 含量 {{ page.ai_content }}%</span>
+</div>
+<style>
+.ai-badge { text-align: center; margin: -0.4rem 0 1.2rem; font-size: 0.75rem; color: var(--stone); line-height: 1.6; }
+.ai-battery { display: inline-block; padding: 1px; border: 1px solid var(--stone); border-radius: 2px; vertical-align: middle; line-height: 0; }
+.ai-cell { display: inline-block; width: 3px; height: 7px; margin-right: 1px; background: var(--border); vertical-align: top; }
+.ai-cell:last-child { margin-right: 0; }
+.ai-cell.on { background: var(--brand); }
+.ai-cap { display: inline-block; width: 2px; height: 5px; background: var(--stone); border-radius: 0 1px 1px 0; vertical-align: middle; margin-right: 6px; }
+.ai-label { letter-spacing: 0.5px; vertical-align: middle; }
+</style>
+{% endif %}

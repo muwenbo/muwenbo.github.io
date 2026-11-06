@@ -3,6 +3,7 @@ layout: post
 title: "构建变异评级的 AI Workflow"
 date: 2025-03-28
 category: professional
+ai_content: 60
 image: /assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/cover.png
 tags: [bioinformatics, ACMG, AI, workflow]
 excerpt: "基于 ACMG 指南，用 Dify 搭建一个 AI 工作流，尝试自动完成基因变异致病性的分级评估。"
@@ -46,12 +47,14 @@ excerpt: "基于 ACMG 指南，用 Dify 搭建一个 AI 工作流，尝试自动
 3. **转录本数据**：来源于 NCBI 的 gff 文件。我们不想让模型做推理的同时，还要做数学计算。所以这里提前计算了每个转录本的长度、外显子结构，并根据 50-55 nt 规则估算 NMD 阈值。对于像 *PTEN*、*CDH* 等一些 ClinGen 有特殊规定的基因，也可以直接修正具体数值来测试大模型对 NMD 的判读准确性。
 4. **文献或病例研究**：目前像 SerpApi, Tavily 等主流的支持 AI 搜索的工具大多是执行网页搜索，返回的结果主要是 ClinVar 数据的总结，无法得到我们想要的来着文献内容的 de novo 发生情况、功能性研究或替代分子机制（alternative molecular basis）等信息。唯一较符合需求的是 scite.ai，它可以基于自定义提示词收集文章，并提取相关研究数据。可惜免费账户无法调用 API，因此无法直接整合进这个 workflow 中。只能将他的文献总结作为手动输入到 workflow 中。
 
+![](/assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/scite_methodology.png)
+
 ![](/assets/images/posts/2025-03-28-ai-workflow-for-variant-classification/scite.png)
 
 
 ### 模型及提示词构建
 
-在模型方面使用具备推理能力的 GPT-o1 模型。理论上讲推理型模型会自行组织思维链（Chain of Thought, CoT），所以这里这次测试我先假设AI已经全知全能、超越人类，不特意指定推理步骤，而是只规定角色和输出格式，剩下的交给大模型自由发挥。
+模型使用具备推理能力的 GPT-o1。理论上讲推理型模型会自行组织思维链（Chain of Thought, CoT），所以这里这次测试我先假设AI已经全知全能、超越人类，不特意指定推理步骤，而是只规定角色和输出格式，剩下的交给大模型自由发挥。
 
 **提示词**：
 > You are a genetic variant curation expert. Your role is to analyze genetic variant information and apply established classification guidelines to determine clinical significance according to ACMG/AMP or other relevant guidelines. You should explain your reasoning throughout the classification process."
@@ -240,6 +243,6 @@ Pathogenic (PM3_Very Strong+PVS1_Strong)
 
 3. AI 在评级过程中经常倾向于参考 ClinVar 数据库。如果某些变异在 ClinVar 中的数据不够可靠，很可能会导致 AI 产生错误的判断。而 ClinGen 早已经建议在 PP5 和 BP6 上不要使用 ClinVar 数据。
 
-4. 文献研究和病例数据的分析仍有较大提升空间。虽然特定的 AI 工具能进行文献的搜索和分析，但在专家评级中使用的文献，AI 基本无法精准自动找到。这个问题并不在于推理模型本身，而是现有的文献检索和分析技术仍然不够理想。短期内可能还是需要采用人工提供相关文献内容，由 AI 辅助分析的方式。
+4. 文献研究和病例数据的分析仍有较大提升空间。虽然特定的 AI 工具能进行文献的搜索和分析，但在专家评级中使用的文献，AI 基本无法精准自动找到。推理模型本身不是瓶颈，问题在于现有的文献检索和分析技术仍然不够理想。短期内可能还是需要采用人工提供相关文献内容，由 AI 辅助分析的方式。
 
 总体来说，当前的 AI Workflow 还不能一站式解决问题。想要投入临床应用，需要进一步拆解和完善评级过程中的各个环节。

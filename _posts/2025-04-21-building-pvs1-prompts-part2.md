@@ -3,6 +3,7 @@ layout: post
 title: "构建 PVS1 分析提示词 Step by Step（下）"
 date: 2025-04-21
 category: professional
+ai_content: 60
 tags: [bioinformatics, ACMG, PVS1, AI, prompt-engineering]
 image: /assets/images/posts/2025-04-21-building-pvs1-prompts-part2/cover.png
 excerpt: "AI 在验证过程中屡屡\"掉坑\"，但每次失误都揭示了提示词设计的新思路——PVS1 分析提示词的打磨与迭代之旅。"
@@ -58,7 +59,7 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
 
 **NM_000314.8(*PTEN*):c.1003C>T (p.Arg335Ter)**
 
-在 *PTEN* 基因的致病机制判断上，大模型没有问题。这个变异主要用来测试模型能否正确判断变异是触发 NMD 还是逃脱 NMD。当我们不给定任何 NMD 阈值时，模型自称采用的是 50 nt 规则来进行 NMD 判定，但其实计算结果并不正确。
+在 *PTEN* 基因的致病机制判断上，大模型没有问题。这个变异主要用来测试模型能否正确判断变异是触发 NMD 还是逃脱 NMD。如果不给定任何 NMD 阈值，模型自称采用的是 50 nt 规则来进行 NMD 判定，但其实计算结果并不正确。
 
 > NMD Prediction:
 > * The variant introduces a premature termination codon (PTC) at codon 335.
@@ -154,14 +155,14 @@ PVS1 分析提示词的构建不可能一蹴而就。在验证过程遇到各种
  
 **NM_001503.4(*GPLD1*):c.2440C>T(p.Gln814Ter)**
 
-此变异是设计来验证当外显子中存在人群中的高频 LoF 变异时，AI 是否能正确判读。根据 gnomAD 数据库，这个变异所在的外显子包含一个高频的 p.Val815SerfsTer47 LoF变异，在 Finnish European 中人群频率约 2%，应该是可以认为外显子中存在人群中的高频 LoF 变异。
+此变异是设计来验证外显子中存在人群高频 LoF 变异的情况下，AI 是否能正确判读。根据 gnomAD 数据库，这个变异所在的外显子包含一个高频的 p.Val815SerfsTer47 LoF变异，在 Finnish European 中人群频率约 2%，应该是可以认为外显子中存在人群中的高频 LoF 变异。
 
 尽管 *GPLD1* 的致病机制不是 LoF，AI 会根据这个原因判读 PVS1 不适用。但我们的提示词是设计了让 AI 输出中间分析过程的，所以依然可以根据 AI 的输出来判断 AI 是否识别到外显子中存在人群中的高频 LoF 变异的情况。
 
 ![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/GPLD1-variant-gnomAD-dist.png)
 *gnomAD数据库中 NM_001503.4(GPLD1):c.2440C>T(p.Gln814Ter) 上下游 20bp 的变异分布*
 
-毫无意外，AI 给出的是没有外显子中存在高频 LoF 的变异的证据。要想解决，我们需要把这种数据以输入方式提供给模型，模型才能有判断的依据。这里我们借鉴 AutoPVS1 的实现方式，也就是对所有基因的各个外显子中 LoF 的变异分布及其人群频率进行预计算。然后将这个数据实现为可供我们 workflow 调用的API。当有所在外显子 LoF 变异人群频率的数据时，AI 就可以成功的进行判读了。
+毫无意外，AI 给出的是没有外显子中存在高频 LoF 的变异的证据。要想解决，我们需要把这种数据以输入方式提供给模型，模型才能有判断的依据。这里我们借鉴 AutoPVS1 的实现方式，也就是对所有基因的各个外显子中 LoF 的变异分布及其人群频率进行预计算。然后将这个数据实现为可供我们 workflow 调用的API。有了所在外显子 LoF 变异的人群频率数据，AI 就可以成功判读了。
 
 
 ![](/assets/images/posts/2025-04-21-building-pvs1-prompts-part2/GPLD1-variant-popF-analysis.png)

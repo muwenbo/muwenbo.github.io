@@ -3,6 +3,7 @@ layout: post
 title: "真正的 ChatGene 正式上线 —— Vicuña"
 date: 2026-01-07
 category: professional
+ai_content: 85
 image: /assets/images/posts/2026-01-07-chatgene-launch/cover.png
 tags: [bioinformatics, AI, product]
 excerpt: "没有真实用户的反馈，永远不知道 AI 能在临床场景中走多远。面向遗传分析的 AI 平台 Vicuña 正式上线。"

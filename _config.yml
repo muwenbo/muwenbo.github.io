@@ -9,6 +9,10 @@ remote_theme: chesterhow/tale
 
 # Build settings
 markdown: kramdown
+kramdown:
+  # Straight quotes: kramdown's smart quotes pick open/close from spaces,
+  # which Chinese text lacks, so "中文" rendered as ”中文”.
+  smart_quotes: ["apos", "apos", "quot", "quot"]
 
 # Plugins
 plugins:
@@ -20,4 +24,5 @@ exclude:
   - Gemfile.lock
   - CLAUDE.md
   - README.md
+  - scripts
   - wechat-public-blogs

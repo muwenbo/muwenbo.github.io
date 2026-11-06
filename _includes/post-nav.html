@@ -1,0 +1,37 @@
+{% comment %}
+  Previous / next links with titles, limited to the post's own category so a
+  professional article never links to a travel story. Older on the left,
+  newer on the right (reading order of a series).
+{% endcomment %}
+{% assign cat_posts = site.categories[page.category] | default: site.posts %}
+{% assign older = nil %}
+{% assign newer = nil %}
+{% for p in cat_posts %}
+  {% if p.url == page.url %}
+    {% assign i_newer = forloop.index0 | minus: 1 %}
+    {% assign i_older = forloop.index0 | plus: 1 %}
+    {% if forloop.first == false %}{% assign newer = cat_posts[i_newer] %}{% endif %}
+    {% if forloop.last == false %}{% assign older = cat_posts[i_older] %}{% endif %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<nav class="post-nav" aria-label="More posts">
+  <div class="post-nav-item post-nav-older">
+    {% if older %}
+      <a href="{{ older.url | relative_url }}">
+        <span class="post-nav-label">&#8592; 上一篇</span>
+        <span class="post-nav-title">{{ older.title }}</span>
+      </a>
+    {% endif %}
+  </div>
+  <div class="post-nav-item post-nav-newer">
+    {% if newer %}
+      <a href="{{ newer.url | relative_url }}">
+        <span class="post-nav-label">下一篇 &#8594;</span>
+        <span class="post-nav-title">{{ newer.title }}</span>
+      </a>
+    {% endif %}
+  </div>
+</nav>
+<p class="post-nav-top"><a href="#">Top</a></p>

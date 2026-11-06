@@ -3,6 +3,7 @@ layout: post
 title: "构建 PVS1 分析提示词 Step by Step（上）"
 date: 2025-04-10
 category: professional
+ai_content: 60
 tags: [bioinformatics, ACMG, PVS1, AI, prompt-engineering]
 image: /assets/images/posts/2025-04-10-building-pvs1-prompts-part1/cover.png
 excerpt: "PVS1 是 ACMG 指南中最重要也最复杂的证据类型之一。本篇从零开始，逐步构建能可靠完成 PVS1 分析的提示词。"
@@ -18,7 +19,7 @@ PVS1 是 ACMG 指南中评估基因变异致病性的一个重要标准证据类
 
 PVS1 的一些使用须知和背景如下：
 1. 它属于 ACMG 评估系统中“非常强”的致病证据（Very Strong），因此使用上门槛也高，不能随便“乱扣帽子”。
-2. 为了规范使用，行业专家们还专门发了一篇操作手册式的论文[1]，把 PVS1 的评估流程做成了一个“决策树”（Decision Tree）。不过，这棵树不像问答题一样简单——很多判断并不是“是”或“不是”那么二元，而是需要深度的专业判断。比如哪里是“关键区域”（critical region）？是否会发生 NMD（nonsense-mediated decay）？
+2. 为了规范使用，行业专家们还专门发了一篇操作手册式的论文[1]，把 PVS1 的评估流程做成了一个“决策树”（Decision Tree）。不过，这棵树不像问答题一样简单——很多判断需要深度的专业判断，没法简单回答“是”或“不是”。比如哪里是“关键区域”（critical region）？是否会发生 NMD（nonsense-mediated decay）？
 3. 为此，也有一些工具来辅助分析，我也会应用以下这 2 个工具来对比和判断我们 AI 方法的表现：
     * **AutoPVS1**：完全基于专家论文中的决策树，结合数据库，力求明确各项判断的具体指标和定义，并且提供得到最终结果的完整决策树路径；
     * **Varsome**：它的遗传变异分析台中提供PVS1的评定，虽然不严格遵循决策树，但凭借其用户社区的力量和变异数据积累，形成了一套自己的评估体系。

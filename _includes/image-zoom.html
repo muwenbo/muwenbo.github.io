@@ -1,0 +1,31 @@
+{% comment %}
+  Click-to-enlarge for post images that are displayed smaller than their
+  original size. Click or press Esc to close.
+{% endcomment %}
+<script>
+(function () {
+  function shrunk(img) { return img.naturalWidth > img.clientWidth + 8; }
+  function mark(img) { if (shrunk(img)) img.classList.add('zoomable'); else img.classList.remove('zoomable'); }
+  var imgs = document.querySelectorAll('.post img:not(.emoji):not(.post-cover)');
+  imgs.forEach(function (img) {
+    if (img.closest('a')) return;
+    if (img.complete) mark(img); else img.addEventListener('load', function () { mark(img); });
+    img.addEventListener('click', function () {
+      if (!img.classList.contains('zoomable')) return;
+      var box = document.createElement('div');
+      box.className = 'img-zoom';
+      var big = document.createElement('img');
+      big.src = img.currentSrc || img.src; big.alt = img.alt;
+      box.appendChild(big);
+      // Very tall images (full-page screenshots): show at readable width and scroll.
+      if (img.naturalHeight > img.naturalWidth * 1.6) box.classList.add('tall');
+      function close() { box.remove(); document.removeEventListener('keydown', onKey); }
+      function onKey(e) { if (e.key === 'Escape') close(); }
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', onKey);
+      document.body.appendChild(box);
+    });
+  });
+  window.addEventListener('resize', function () { imgs.forEach(mark); });
+})();
+</script>

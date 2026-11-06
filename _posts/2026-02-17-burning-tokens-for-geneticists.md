@@ -3,6 +3,7 @@ layout: post
 title: "燃烧 Token 不是程序员的特权，现在轮到遗传分析师了"
 date: 2026-02-17
 category: professional
+ai_content: 75
 image: /assets/images/posts/2026-02-17-burning-tokens-for-geneticists/cover.png
 tags: [bioinformatics, ACMG, VCEP, AI, Claude]
 excerpt: "基于 Claude Code 的 Skill 机制，把散落在 PPT 和 Word 里的 ClinGen VCEP 专家规则，变成可执行的 AI 变异评级工具。"
@@ -31,7 +32,7 @@ ClinGen 各 VCEP 专家组正是为了解决这个问题而存在的——他们
 
 ## 什么是 Skill？为什么它适合变异评级？
 
-如果你还不了解 Skill，一句话概括：**Skill 是一种让 AI 掌握特定领域知识和工作流程的机制。**
+如果你还不了解 Skill：**Skill 这种机制能让 AI 掌握特定领域知识和工作流程。**
 
 它的核心公式是：
 
@@ -138,7 +139,7 @@ AI 需要完整的变异注释信息——人群频率、有害性生信预测�
 **文献二** | PMID:23771925
 *Prevalence, characteristics and clinical diagnosis of maturity onset diabetes of the young due to mutations in HNF1A, HNF4A, and glucokinase: results from the SEARCH for Diabetes in Youth*
 
-这篇文章发表于 2013 年，确实包含该变异，但仅出现在**补充材料的表格**中。也许正因如此，该变异在 HGMD 中也未收录这篇文献——不得不感叹 ClinGen 专家的细致程度。
+这篇文章发表于 2013 年，确实包含该变异，但仅出现在**补充材料的表格**中。也许正因如此，该变异在 HGMD 中也未收录这篇文献。不得不感叹 ClinGen 专家的细致程度。
 
 当我提前下载好第一篇文章的 PDF，并提供第二篇文章的 PMID 后：
 

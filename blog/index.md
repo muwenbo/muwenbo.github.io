@@ -26,22 +26,22 @@ title: Blog
 }
 
 .timeline-item:hover {
-  border-left-color: #111;
+  border-left-color: var(--brand);
   padding-left: 0.9rem;
 }
 
 .timeline-date {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #bbb;
+  color: var(--stone);
   margin-bottom: 0.45rem;
 }
 
 .timeline-rule {
   border: none;
-  border-top: 2px solid #111;
+  border-top: 1px solid var(--near-black);
   margin: 0 0 1rem 0;
 }
 
@@ -73,7 +73,7 @@ title: Blog
 
 .timeline-excerpt {
   margin: 0;
-  color: #666;
+  color: var(--olive);
   font-size: 0.93rem;
   line-height: 1.6;
 }
@@ -100,15 +100,15 @@ title: Blog
   margin: 1.5rem 0 0;
   padding: 0;
   list-style: none;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .blog-tabs li {
   padding: 0.5rem 0;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.04em;
-  color: #999;
+  color: var(--stone);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
@@ -116,12 +116,12 @@ title: Blog
 }
 
 .blog-tabs li:hover {
-  color: #555;
+  color: var(--dark-warm);
 }
 
 .blog-tabs li.active {
-  color: #111;
-  border-bottom-color: #111;
+  color: var(--brand);
+  border-bottom-color: var(--brand);
 }
 </style>
 
@@ -150,7 +150,7 @@ title: Blog
       {% if thumb %}
       <div class="timeline-thumb">
         <a href="{{ post.url | prepend: site.baseurl }}">
-          <img src="{{ thumb }}" alt="{{ post.title }}">
+          <img src="{{ thumb }}" alt="{{ post.title | escape }}">
         </a>
       </div>
       {% endif %}
@@ -164,18 +164,23 @@ title: Blog
 {% endif %}
 
 <script>
+// Filter by category. Deep-linkable: /blog/#professional or /blog/#human
+function applyFilter(filter) {
+  var tab = document.querySelector('.blog-tabs li[data-filter="' + filter + '"]');
+  if (!tab) { filter = 'all'; tab = document.querySelector('.blog-tabs li[data-filter="all"]'); }
+  document.querySelector('.blog-tabs li.active').classList.remove('active');
+  tab.classList.add('active');
+  document.querySelectorAll('.timeline-item').forEach(function(item) {
+    item.style.display = (filter === 'all' || item.getAttribute('data-category') === filter) ? '' : 'none';
+  });
+}
 document.querySelectorAll('.blog-tabs li').forEach(function(tab) {
   tab.addEventListener('click', function() {
-    document.querySelector('.blog-tabs li.active').classList.remove('active');
-    tab.classList.add('active');
     var filter = tab.getAttribute('data-filter');
-    document.querySelectorAll('.timeline-item').forEach(function(item) {
-      if (filter === 'all' || item.getAttribute('data-category') === filter) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
+    history.replaceState(null, '', filter === 'all' ? location.pathname : '#' + filter);
+    applyFilter(filter);
   });
 });
+applyFilter(location.hash.slice(1) || 'all');
+window.addEventListener('hashchange', function() { applyFilter(location.hash.slice(1) || 'all'); });
 </script>

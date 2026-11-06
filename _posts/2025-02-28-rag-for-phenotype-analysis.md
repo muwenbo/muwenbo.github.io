@@ -3,6 +3,7 @@ layout: post
 title: "在表型分析中应用 RAG：让大模型少说胡话"
 date: 2025-02-28
 category: professional
+ai_content: 50
 image: /assets/images/posts/2025-02-28-rag-for-phenotype-analysis/cover.png
 tags: [bioinformatics, RAG, HPO, AI]
 excerpt: "将非标准临床描述映射到 HPO 标准术语是遗传分析的关键第一步。本文探索 RAG 如何帮助大模型减少幻觉、提升表型分析的精度。"
